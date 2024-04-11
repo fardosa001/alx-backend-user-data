@@ -6,7 +6,8 @@ import os
 import re
 from typing import List, Tuple
 
-PII_FIELDS: Tuple[str, ...] = ("name", "email", "phone", "ssn", "credit_card")
+PII_FIELDS = ('name', 'email', 'phone', 'ssn', 'password')
+""" containing the fields from user_data.csv that are considered PII. """
 
 
 class RedactingFormatter(logging.Formatter):
@@ -41,13 +42,12 @@ def get_logger() -> logging.Logger:
     """Return a logging.Logger object configured as requested."""
     logger = logging.getLogger("user_data")
     logger.setLevel(logging.INFO)
+    logger.propagate = False
 
-    formatter = RedactingFormatter(PII_FIELDS)
+    formatter = (RedactingFormatter(PII_FIELDS))
 
     handler = logging.StreamHandler()
     handler.setFormatter(formatter)
 
     logger.addHandler(handler)
-    logger.propagate = False
-
     return logger
