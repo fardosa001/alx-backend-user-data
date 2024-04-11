@@ -1,8 +1,12 @@
 #!/usr/bin/env python3
 """Regex-ing"""
-import re
-from typing import List
 import logging
+import csv
+import os
+import re
+from typing import List, Tuple
+
+PII_FIELDS: Tuple[str, ...] = ("name", "email", "phone", "ssn", "credit_card")
 
 
 class RedactingFormatter(logging.Formatter):
@@ -31,3 +35,19 @@ def filter_datum(fields: List[str], redaction: str,
         message = re.sub(fr'{item}=.+?{separator}',
                          f'{item}={redaction}{separator}', message)
     return message
+
+
+def get_logger() -> logging.Logger:
+    """Return a logging.Logger object configured as requested."""
+    logger = logging.getLogger("user_data")
+    logger.setLevel(logging.INFO)
+
+    formatter = RedactingFormatter(PII_FIELDS)
+
+    handler = logging.StreamHandler()
+    handler.setFormatter(formatter)
+
+    logger.addHandler(handler)
+    logger.propagate = False
+
+    return logger
