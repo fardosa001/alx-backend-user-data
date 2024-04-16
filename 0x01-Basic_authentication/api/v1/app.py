@@ -14,8 +14,8 @@ app = Flask(__name__)
 app.register_blueprint(app_views)
 CORS(app, resources={r"/api/v1/*": {"origins": "*"}})
 auth = None
-AUTH_TYPE = getenv("AUTH_TYPE")
-if AUTH_TYPE == "basic_auth":
+auth_type = getenv("AUTH_TYPE")
+if auth_type == "basic_auth":
     from api.v1.auth.basic_auth import BasicAuth
     auth = BasicAuth()
 else:
@@ -33,10 +33,10 @@ def before_request():
                       '/api/v1/forbidden/']
     if not auth.require_auth(request.path, excluded_paths):
         return
-        if auth.authorization_header(request) is None:
-            abort(401)
-        if auth.current_user(request) is None:
-            abort(403)
+    if auth.authorization_header(request) is None:
+        abort(401)
+    if auth.current_user(request) is None:
+        abort(403)
 
 
 @app.errorhandler(404)
