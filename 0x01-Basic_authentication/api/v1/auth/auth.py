@@ -11,7 +11,7 @@ class Auth:
         """Check if authentication is required for the given path."""
         if path is None or excluded_paths is None:
             return True
-   
+
         for excluded_path in excluded_paths:
             if excluded_path.endswith('*'):
                 prefix = excluded_path[:-1]
