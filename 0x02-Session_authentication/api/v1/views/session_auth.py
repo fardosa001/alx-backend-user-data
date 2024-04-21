@@ -29,7 +29,7 @@ def login() -> str:
             return jsonify({"error": "wrong password"}), 401
 
 
-def logout():
+def logout() -> str:
     """ User logout """
     from api.v1.app import auth
     if not auth.destroy_session(request):
