@@ -30,7 +30,7 @@ class SessionAuth(Auth):
         if session_cookie is None:
             return None
         _id = self.user_id_for_session_id(session_cookie)
-        if user_id is None:
+        if _id is None:
             return None
         return User.get(user_id)
 
