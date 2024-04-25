@@ -34,28 +34,20 @@ class DB:
 
     def add_user(self, email: str, hashed_password: str) -> User:
         """ save the user to the database and returns a User object """
-        try:
-            user = User(email=email, hashed_password=hashed_password)
-            self._session.add(user)
-            self._session.commit()
-            return user
-        except Exception:
-            if user is None:
-                return
-
+        user = User(email=email, hashed_password=hashed_password)
+        self._session.add(user)
+        self._session.commit()
+        return user
 
     def find_user_by(self, **kwargs) -> User:
         """Find a user in the database by arbitrary keyword arguments"""
-        try:
-            user = user = self._session.query(User).filter_by(**kwargs).first()
-            if user is None:
-                raise NoResultFound("No user found matching the provided criteria")
-
-            return user
-        except InvalidRequestError as e:
-            if kwargs is None:
-                raise InvalidRequestError("Invalid query arguments") from e
-
+        if kwargs is None:
+            raise InvalidRequestError
+        user = user = self._session.query(User).filter_by(**kwargs).first()
+        if user is None:
+            raise NoResultFound
+        return user
+             
     
     #def update_user(self, user_id: int, **kwargs) -> None:
        # """"""
