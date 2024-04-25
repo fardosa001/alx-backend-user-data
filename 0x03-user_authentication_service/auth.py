@@ -5,6 +5,7 @@ from db import DB
 from user import User
 from sqlalchemy.orm.exc import NoResultFound
 from uuid import uuid4
+from typing import Optional
 
 
 def _hash_password(password: str) -> bytes:
@@ -70,3 +71,7 @@ class Auth:
             return None
         else:
             return user
+
+    def destroy_session(self, user_id: int) -> None:
+        """Updates the corresponding user's session ID to None."""
+        self._db.update_user(user_id, session_id=None)
