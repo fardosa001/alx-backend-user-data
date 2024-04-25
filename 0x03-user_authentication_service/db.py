@@ -38,9 +38,9 @@ class DB:
         try:
             self._session.add(user)
             self._session.commit()
-            return user
         except Exception:
             return None
+        return user
 
     def find_user_by(self, **kwargs) -> User:
         """Find a user in the database by arbitrary keyword arguments"""
