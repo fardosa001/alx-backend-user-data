@@ -34,13 +34,15 @@ class DB:
 
     def add_user(self, email: str, hashed_password: str) -> User:
         """ save the user to the database and returns a User object """
-        user = User(email=email, hashed_password=hashed_password)
+        new_user = User(email=email, hashed_password=hashed_password)
         try:
-            self._session.add(user)
+            self._session.add(new_user)
             self._session.commit()
-        except Exception:
-            return None
-        return user
+        except Exception as e:
+            print(f"Error adding user to database: {e}")
+            self._session.rollback()
+            raise
+        return new_user
 
     def find_user_by(self, **kwargs) -> User:
         """Find a user in the database by arbitrary keyword arguments"""
